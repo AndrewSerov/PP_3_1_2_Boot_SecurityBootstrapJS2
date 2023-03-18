@@ -3,13 +3,17 @@ package ru.kata.spring.boot_security.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
+import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 import ru.kata.spring.boot_security.demo.services.UserDetailService;
 import ru.kata.spring.boot_security.demo.services.UserService;
+import ru.kata.spring.boot_security.demo.utill.UserValidator;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
@@ -22,6 +26,13 @@ public class PeopleController {
     private UserDetailService userDetailService;
 
     private RoleRepository roleRepository;
+
+    private UserValidator userValidator;
+
+    @Autowired
+    public void setUserValidator(UserValidator userValidator) {
+        this.userValidator = userValidator;
+    }
 
     @Autowired
     public void setRoleRepository(RoleRepository roleRepository) {
@@ -60,14 +71,20 @@ public class PeopleController {
     @GetMapping("/admin/addNewUser")
     public String addNewUser(Model model) {
         User user = new User();
-        model.addAttribute("user", user);
+        model.addAttribute("person", user);
         List<Role> roles = roleRepository.findAll();
         model.addAttribute("allRoles", roles);
         return "addUser";
     }
 
     @PostMapping("/admin/save")
-    public String saveUser(@ModelAttribute("user") User user) {
+    public String saveUser(@ModelAttribute("person") @Valid User user, BindingResult bindingResult, Model model) {
+        userValidator.validate(user, bindingResult);
+        if (bindingResult.hasErrors()) {
+            List<Role> roles = roleRepository.findAll();
+            model.addAttribute("allRoles", roles);
+            return "addUser";
+        }
         userService.save(user);
         return "redirect:/admin/";
     }
@@ -81,7 +98,14 @@ public class PeopleController {
     }
 
     @PatchMapping("/admin/{id}/update")
-    public String update(@ModelAttribute("user") User user, @PathVariable("id") int id) {
+    public String update(@ModelAttribute("person") @Valid User user, BindingResult bindingResult, @PathVariable("id") int id, Model model) {
+        userValidator.validate(user, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            List<Role> roles = roleRepository.findAll();
+            model.addAttribute("allRoles", roles);
+            return "edit";
+        }
         userService.updateUser(id, user);
         return "redirect:/admin/";
     }

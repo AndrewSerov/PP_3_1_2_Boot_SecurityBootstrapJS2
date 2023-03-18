@@ -5,15 +5,17 @@
     <title>New user</title>
 </head>
 <body>
-<form th:method="POST" th:action="@{/admin/save}" th:object="${user}">
+<form th:method="POST" th:action="@{/admin/save}" th:object="${person}">
     <label for="username">Enter name: </label>
     <input type = "text" th:field = "*{username}" id = "username" th:charset="utf-8"/>
+    <div style="color: red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</div>
     <br>
     <label for="lastname">Enter lastname: </label>
     <input type = "text" th:field = "*{lastname}" id = "lastname" th:charset="utf-8"/>
     <br>
     <label for="password">Enter password: </label>
     <input type = "text" th:field = "*{password}" id = "password" th:charset="utf-8"/>
+    <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>
     <br>
 
             <label>Roles:

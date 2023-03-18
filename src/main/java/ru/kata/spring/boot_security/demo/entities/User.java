@@ -1,7 +1,10 @@
 package ru.kata.spring.boot_security.demo.entities;
 
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
 
 @Entity
@@ -13,12 +16,14 @@ public class User {
     private int id;
 
     @Column
+    @NotEmpty (message = "Имя не может быть пустым")
     private String username;
 
     @Column
     private String lastname;
 
     @Column
+    @NotEmpty (message = "Пароль не может быть пустым")
     private String password;
 
     @ManyToMany

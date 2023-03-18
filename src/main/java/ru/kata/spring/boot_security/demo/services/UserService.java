@@ -36,11 +36,16 @@ public class UserService {
 
     @Transactional
     public void updateUser(int id, User user) {
-        userRepository.updateUser(id, user);
+        user.setId(id);
+        userRepository.save(user);
     }
 
     @Transactional
     public void deleteUser(int id) {
         userRepository.deleteById(id);
+    }
+
+    public User findByUsername (String username) {
+        return userRepository.findByUsername(username);
     }
 }
