@@ -99,7 +99,6 @@ public class PeopleController {
 
     @PatchMapping("/admin/{id}/update")
     public String update(@ModelAttribute("person") @Valid User user, BindingResult bindingResult, @PathVariable("id") int id, Model model) {
-        userValidator.validate(user, bindingResult);
 
         if (bindingResult.hasErrors()) {
             List<Role> roles = roleRepository.findAll();
