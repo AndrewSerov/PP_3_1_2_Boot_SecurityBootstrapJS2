@@ -2,23 +2,117 @@
 <html lang="en" xmlns:th="http://thymeleaf.org">
 
 <head>
-  <meta charset="UTF-8">
-  <title>All USERS</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>All USERS</title>
 </head>
 
 <body>
-<h2>ALL USERS</h2>
-<br>
-<div th:each="user : ${allPeople}">
-  <a th:href="@{/admin/{id}(id=${user.getId()})}" th:text="${user.getUsername()}">person</a>
-  <a th:href="@{/admin/{id}(id=${user.getId()})}" th:text="${user.getLastname()}">person</a>
-</div>
-<br>
-<input type="button" value="Add"
-       onclick="window.location.href='addNewUser'"/>
 
-<br>
-<br>
-<a th:href="@{/logout}">Logout</a>
+<div class="container">
+    <h2>Admin panel</h2>
+
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a class="nav-link" data-toggle="tab" href="#">Users table</a>
+        </li>
+        <li><a class="nav-link" data-toggle="tab" href="#menu1">Add new user</a></li>
+
+    </ul>
+
+    <h5>All users</h5>
+    <br>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">LastName</th>
+            <th scope="col">Roles</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="person : ${allPeople}">
+            <td><a th:text="${person.getId()}">person</a></td>
+            <td><a th:text="${person.getUsername()}">person</a></td>
+            <td><a th:text="${person.getLastname()}">person</a></td>
+            <td><a th:text="${person.getRoles()}">person</a></td>
+
+<td>
+            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#editPerson">
+                Edit
+            </button>
+</td>
+
+            <div class="modal fade" id="editPerson" tabindex="-1" aria-labelledby="ModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title fs-5" id="ModalLabel">Edit user</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="name" class="col-form-label">Name:</label>
+                                    <input type="text" class="form-control" id="name">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="lastname" class="col-form-label">Lastname:</label>
+                                    <input type="text" class="form-control" id="lastname">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="col-form-label">Password:</label>
+                                    <input type="text" class="form-control" id="password">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <td>
+                <form th:method="DELETE" th:action="@{/admin/{id}(id=${person.getId()})}">
+                    <button class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+
+    <br>
+
+    <input type="button" value="Add"
+           onclick="window.location.href='addNewUser'"/>
+    <br>
+    <br>
+    <a th:href="@{/logout}">Logout</a>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
 </html>
