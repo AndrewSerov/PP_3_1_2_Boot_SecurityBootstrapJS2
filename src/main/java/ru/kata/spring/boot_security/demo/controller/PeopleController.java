@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
-import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 import ru.kata.spring.boot_security.demo.services.UserDetailService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 import ru.kata.spring.boot_security.demo.utill.UserValidator;
@@ -75,7 +74,7 @@ public class PeopleController {
         System.out.println(user.getRoles());
         for(Role role:user.getRoles()){
             if(role.getName().equals("ROLE_ADMIN")) {
-                return "showUserRoleUser";
+                return "showUserRoleAdmin";
             }
         }
         return "showUser";
