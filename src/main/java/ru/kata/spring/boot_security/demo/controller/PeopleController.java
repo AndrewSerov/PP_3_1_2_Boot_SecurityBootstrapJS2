@@ -49,9 +49,15 @@ public class PeopleController {
     }
 
     @GetMapping("/admin/")
-    public String getAllPeople(Model model) {
+    public String getAllPeople(Model model, Principal principal) {
+        User userPrincipal = userDetailService.findByUsername(principal.getName());
+        model.addAttribute("personPrincipal", userPrincipal);
         List<User> list = userService.getAllPeople();
+        User user = new User();
+        model.addAttribute("person", user);
         model.addAttribute("allPeople", list);
+        List<Role> roles = roleRepository.findAll();
+        model.addAttribute("allRoles", roles);
         return "allPeople";
     }
 
@@ -64,8 +70,15 @@ public class PeopleController {
     @GetMapping("/user")
     public String showUser(Principal principal, Model model) {
         User user = userDetailService.findByUsername(principal.getName());
+
         model.addAttribute("person", user);
-        return "showUserRoleUser";
+        System.out.println(user.getRoles());
+        for(Role role:user.getRoles()){
+            if(role.getName().equals("ROLE_ADMIN")) {
+                return "showUserRoleUser";
+            }
+        }
+        return "showUser";
     }
 
     @GetMapping("/admin/addNewUser")
@@ -79,12 +92,12 @@ public class PeopleController {
 
     @PostMapping("/admin/save")
     public String saveUser(@ModelAttribute("person") @Valid User user, BindingResult bindingResult, Model model) {
-        userValidator.validate(user, bindingResult);
-        if (bindingResult.hasErrors()) {
-            List<Role> roles = roleRepository.findAll();
-            model.addAttribute("allRoles", roles);
-            return "addUser";
-        }
+//        userValidator.validate(user, bindingResult);
+//        if (bindingResult.hasErrors()) {
+//            List<Role> roles = roleRepository.findAll();
+//            model.addAttribute("allRoles", roles);
+//            return "addUser";
+//        }
         userService.save(user);
         return "redirect:/admin/";
     }
@@ -97,14 +110,14 @@ public class PeopleController {
         return "edit";
     }
 
-    @PatchMapping("/admin/{id}/update")
+    @PutMapping("/admin/{id}/update")
     public String update(@ModelAttribute("person") @Valid User user, BindingResult bindingResult, @PathVariable("id") int id, Model model) {
 
-        if (bindingResult.hasErrors()) {
-            List<Role> roles = roleRepository.findAll();
-            model.addAttribute("allRoles", roles);
-            return "edit";
-        }
+//        if (bindingResult.hasErrors()) {
+//            List<Role> roles = roleRepository.findAll();
+//            model.addAttribute("allRoles", roles);
+//            return "edit";
+//        }
         userService.updateUser(id, user);
         return "redirect:/admin/";
     }
