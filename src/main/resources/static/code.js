@@ -7,27 +7,28 @@ const userForm = document.querySelector('form');
 const username = document.getElementById('username');
 const lastname = document.getElementById('lastname');
 const password = document.getElementById('password');
+const roles = document.getElementById('roles');
+
 
 let option = '';
 
 add.addEventListener("click", () => {
-    username.value = ''
-    lastname.value = ''
-    password.value = ''
 
     userModal.show();
     option = 'create'
 
 })
-const show = (user) => {
+const show = (users) => {
 
-    user.forEach(user => {
+    users.forEach(user => {
+        console.log(user.roles)
         result += `
     <tr>
     <td>${user.id}</td>
     <td>${user.username}</td>
     <td>${user.lastname}</td>
     <td>${user.password}</td>
+    <td>${JSON.stringify(user.roles)}</td>
     <td class = "text-center"><a class = "btnEdit btn btn-primary">Edit</a><a class = "btnDelete btn btn-danger">Delete</a></td>
     
     </tr>
@@ -68,9 +69,12 @@ on(document, "click", '.btnEdit', e => {
     const usernameForm = row.children[1].innerHTML
     const lastnameForm = row.children[2].innerHTML
     const passwordForm = row.children[3].innerHTML
+    const rolesForm = row.children[4].innerHTML
     username.value = usernameForm
     lastname.value = lastnameForm
     password.value = passwordForm
+    roles.value = rolesForm
+
     option = 'edit'
     userModal.show()
 
@@ -78,16 +82,31 @@ on(document, "click", '.btnEdit', e => {
 
 userForm.addEventListener('submit', (e) => {
         e.preventDefault()
-        if(option == 'create') {
+        if (option == 'create') {
+            let json1 = {
+                id: 1,
+                name: 'ROLE_USER'
+            }
+            let json2 = {
+                id: 2,
+                name: 'ROLE_ADMIN'
+            }
+            let listOfRole = [];
+
+            if (userForm.roles.value == 'ROLE_USER') {
+                listOfRole.push(json1)
+            } else listOfRole.push(json2)
+
             fetch(url, {
-                method:'POST',
+                method: 'POST',
                 headers: {
-                    'Content-type':'application/json'
+                    'Content-type': 'application/json'
                 },
-                body:JSON.stringify({
-                    username:username.value,
-                    lastname:lastname.value,
-                    password:password.value
+                body: JSON.stringify({
+                    username: username.value,
+                    lastname: lastname.value,
+                    password: password.value,
+                    roles: listOfRole
                 })
             })
                 .then(response => response.json())
@@ -97,17 +116,32 @@ userForm.addEventListener('submit', (e) => {
                     show(newUser)
                 })
         }
-        if(option == 'edit') {
+        if (option == 'edit') {
+            let json1 = {
+                id: 1,
+                name: 'ROLE_USER'
+            }
+            let json2 = {
+                id: 2,
+                name: 'ROLE_ADMIN'
+            }
+            let listOfRole = [];
+
+            if (userForm.roles.value == 'ROLE_USER') {
+                listOfRole.push(json1)
+            } else listOfRole.push(json2)
+
             fetch(url, {
-                method:'PUT',
+                method: 'PUT',
                 headers: {
-                    'Content-type':'application/json'
+                    'Content-type': 'application/json'
                 },
-                body:JSON.stringify({
-                    id:idForm,
-                    username:username.value,
-                    lastname:lastname.value,
-                    password:password.value
+                body: JSON.stringify({
+                    id: idForm,
+                    username: username.value,
+                    lastname: lastname.value,
+                    password: password.value,
+                    roles: listOfRole
                 })
             })
                 .then(response => response.json())

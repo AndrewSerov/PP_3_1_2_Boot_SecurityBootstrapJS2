@@ -103,6 +103,7 @@
                             <th scope="col">Name</th>
                             <th scope="col">LastName</th>
                             <th scope="col">Password</th>
+                            <th scope="col">Roles</th>
                             <th scope="col">Actions</th>
 
                         </tr>
@@ -128,7 +129,7 @@
                                         aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form>
+                                <form id="userForm">
                                     <div class="mb-3">
                                         <label for="username" class="col-form-label">Username:</label>
                                         <input type="text" class="form-control" id="username">
@@ -140,6 +141,14 @@
                                     <div class="mb-3">
                                         <label for="password" class="col-form-label">Password:</label>
                                         <input type="text" class="form-control" id="password">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="roles" class="col-form-label">Roles:</label>
+                                        <select multiple class="form-control" size="2"  id="roles" name="roles">
+
+                                            <option id="roleNewUser" value="ROLE_USER">USER</option>
+                                            <option id="roleNewAdmin" value="ROLE_ADMIN">ADMIN</option>
+                                        </select>
                                     </div>
 
                                     <div class="modal-footer">
