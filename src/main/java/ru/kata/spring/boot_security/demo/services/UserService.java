@@ -31,7 +31,7 @@ public class UserService {
 
     @Transactional
     public User getById(int id) {
-        return userRepository.getById(id);
+        return userRepository.findById(id).get();
     }
 
     @Transactional
